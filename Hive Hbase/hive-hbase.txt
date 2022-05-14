@@ -1,0 +1,507 @@
+[cloudera@quickstart ~]$ hbase
+Usage: hbase [<options>] <command> [<args>]
+Options:
+  --config DIR    Configuration direction to use. Default: ./conf
+  --hosts HOSTS   Override the list in 'regionservers' file
+
+Commands:
+Some commands take arguments. Pass no args or -h for usage.
+  shell           Run the HBase shell
+  hbck            Run the hbase 'fsck' tool
+  snapshot        Create a new snapshot of a table
+  wal             Write-ahead-log analyzer
+  hfile           Store file analyzer
+  zkcli           Run the ZooKeeper shell
+  upgrade         Upgrade hbase
+  master          Run an HBase HMaster node
+  regionserver    Run an HBase HRegionServer node
+  zookeeper       Run a Zookeeper server
+  rest            Run an HBase REST server
+  thrift          Run the HBase Thrift server
+  thrift2         Run the HBase Thrift2 server
+  clean           Run the HBase clean up script
+  classpath       Dump hbase CLASSPATH
+  mapredcp        Dump CLASSPATH entries required by mapreduce
+  pe              Run PerformanceEvaluation
+  ltt             Run LoadTestTool
+  version         Print the version
+  CLASSNAME       Run the class named CLASSNAME
+[cloudera@quickstart ~]$ hbase shell
+2022-05-14 03:19:04,193 INFO  [main] Configuration.deprecation: hadoop.native.lib is deprecated. Instead, use io.native.lib.available
+HBase Shell; enter 'help<RETURN>' for list of supported commands.
+Type "exit<RETURN>" to leave the HBase Shell
+Version 1.0.0-cdh5.4.2, rUnknown, Tue May 19 17:07:29 PDT 2015
+
+hbase(main):001:0> create table 'flight','finfo','fsch'
+NoMethodError: undefined method `table' for #<Object:0x5739e2f7>
+
+hbase(main):002:0> create 'flight','finfo','fsch'
+0 row(s) in 0.7150 seconds
+
+=> Hbase::Table - flight
+hbase(main):003:0> list
+TABLE                                                                                                                                                                                                                                        
+flight                                                                                                                                                                                                                                       
+1 row(s) in 0.0600 seconds
+
+=> ["flight"]
+hbase(main):004:0> put 'flight',1,'finfo:source','Mumbai'
+0 row(s) in 0.1450 seconds
+
+hbase(main):005:0> put 'flight',1,'finfo:dest','Jannat'
+0 row(s) in 0.0110 seconds
+
+hbase(main):006:0> put 'flight',1,'finfo:year','2050'
+0 row(s) in 0.0210 seconds
+
+hbase(main):007:0> put 'flight',1,'fsch:at','10:10 am'
+0 row(s) in 0.0080 seconds
+
+hbase(main):008:0> put 'flight',1,'fsch:dt','12:10 am'
+0 row(s) in 0.0050 seconds
+
+hbase(main):009:0> put 'flight',1,'fsch:delay_in_mins',22
+0 row(s) in 0.0060 seconds
+
+hbase(main):010:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652523905448, value=22                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+1 row(s) in 0.0680 seconds
+
+hbase(main):011:0> put 'flight',2,'finfo:source','Kedarnath'
+0 row(s) in 0.0040 seconds
+
+hbase(main):012:0> put 'flight',2,'finfo:dest','Manali'
+0 row(s) in 0.0030 seconds
+
+hbase(main):013:0> put 'flight',2,'finfo:year','2030'
+0 row(s) in 0.0060 seconds
+
+hbase(main):014:0> put 'flight',2,'fsch:at','10:15 am'
+0 row(s) in 0.0040 seconds
+
+hbase(main):015:0> put 'flight',2,'fsch:dt','12:15 am'
+0 row(s) in 0.0040 seconds
+
+hbase(main):016:0> put 'flight',1,'fsch:delay_in_mins',26
+0 row(s) in 0.0220 seconds
+
+hbase(main):017:0> delete ‘<table name>’, ‘<row>’, ‘<column name >’, ‘<time stamp>’
+
+ERROR: wrong number of arguments (0 for 3)
+
+Here is some help for this command:
+Put a delete cell value at specified table/row/column and optionally
+timestamp coordinates.  Deletes must match the deleted cell's
+coordinates exactly.  When scanning, a delete cell suppresses older
+versions. To delete a cell from  't1' at row 'r1' under column 'c1'
+marked with the time 'ts1', do:
+
+  hbase> delete 'ns1:t1', 'r1', 'c1', ts1
+  hbase> delete 't1', 'r1', 'c1', ts1
+  hbase> delete 't1', 'r1', 'c1', ts1, {VISIBILITY=>'PRIVATE|SECRET'}
+
+The same command can also be run on a table reference. Suppose you had a reference
+t to table 't1', the corresponding command would be:
+
+  hbase> t.delete 'r1', 'c1',  ts1
+  hbase> t.delete 'r1', 'c1',  ts1, {VISIBILITY=>'PRIVATE|SECRET'}
+
+
+[cloudera@quickstart ~]$ hbase shell
+2022-05-14 03:28:07,141 INFO  [main] Configuration.deprecation: hadoop.native.lib is deprecated. Instead, use io.native.lib.available
+HBase Shell; enter 'help<RETURN>' for list of supported commands.
+Type "exit<RETURN>" to leave the HBase Shell
+Version 1.0.0-cdh5.4.2, rUnknown, Tue May 19 17:07:29 PDT 2015
+
+hbase(main):001:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524021827, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+2 row(s) in 0.2440 seconds
+
+hbase(main):002:0> delete 'flight','1','fsch:delay_in_mins','1652524021827'
+
+ERROR: no constructorfor arguments (org.jruby.java.proxies.ArrayJavaProxy,org.jruby.RubyString) on Java::OrgApacheHadoopHbaseClient::Delete
+
+Here is some help for this command:
+Put a delete cell value at specified table/row/column and optionally
+timestamp coordinates.  Deletes must match the deleted cell's
+coordinates exactly.  When scanning, a delete cell suppresses older
+versions. To delete a cell from  't1' at row 'r1' under column 'c1'
+marked with the time 'ts1', do:
+
+  hbase> delete 'ns1:t1', 'r1', 'c1', ts1
+  hbase> delete 't1', 'r1', 'c1', ts1
+  hbase> delete 't1', 'r1', 'c1', ts1, {VISIBILITY=>'PRIVATE|SECRET'}
+
+The same command can also be run on a table reference. Suppose you had a reference
+t to table 't1', the corresponding command would be:
+
+  hbase> t.delete 'r1', 'c1',  ts1
+  hbase> t.delete 'r1', 'c1',  ts1, {VISIBILITY=>'PRIVATE|SECRET'}
+
+
+hbase(main):003:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524021827, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+2 row(s) in 0.1300 seconds
+
+hbase(main):004:0> flight.delete '1','fsch:delay_in_mins','1652524021827'
+NameError: undefined local variable or method `flight' for #<Object:0x25e7782e>
+
+hbase(main):005:0>  put 'flight',2,'fsch:delay_in_mins',22
+0 row(s) in 0.0490 seconds
+
+hbase(main):006:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524021827, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:delay_in_mins, timestamp=1652524287979, value=22                                                                                                                    
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+2 row(s) in 0.0380 seconds
+
+hbase(main):007:0> flight.delete '1','fsch:delay_in_mins',1652524021827
+NameError: undefined local variable or method `flight' for #<Object:0x25e7782e>
+
+hbase(main):008:0> delete 'flight','1','fsch:delay_in_mins',1652524021827
+0 row(s) in 0.0130 seconds
+
+hbase(main):009:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:delay_in_mins, timestamp=1652524287979, value=22                                                                                                                    
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+2 row(s) in 0.0560 seconds
+
+hbase(main):010:0>  put 'flight',1,'fsch:delay_in_mins',26
+0 row(s) in 0.0040 seconds
+
+hbase(main):011:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524373079, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:delay_in_mins, timestamp=1652524287979, value=22                                                                                                                    
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+2 row(s) in 0.0690 seconds
+
+hbase(main):012:0> alter 'flight',NAME=>'revenue'
+Updating all regions with the new schema...
+0/1 regions updated.
+1/1 regions updated.
+Done.
+0 row(s) in 2.2970 seconds
+
+hbase(main):013:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524373079, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:delay_in_mins, timestamp=1652524287979, value=22                                                                                                                    
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+2 row(s) in 0.0430 seconds
+
+hbase(main):014:0> put 'flight',4,'revenue:rs','45000'
+0 row(s) in 0.0070 seconds
+
+hbase(main):015:0> put 'flight',1,'revenue:rs','45000'
+0 row(s) in 0.0030 seconds
+
+hbase(main):016:0> put 'flight',2,'revenue:rs','25000'
+0 row(s) in 0.0100 seconds
+
+hbase(main):017:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524373079, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 1                                                           column=revenue:rs, timestamp=1652525367678, value=45000                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:delay_in_mins, timestamp=1652524287979, value=22                                                                                                                    
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+ 2                                                           column=revenue:rs, timestamp=1652525376529, value=25000                                                                                                                         
+ 4                                                           column=revenue:rs, timestamp=1652525360533, value=45000                                                                                                                         
+3 row(s) in 0.0290 seconds
+
+hbase(main):018:0> delete 'flight','4','revenue:rs',1652525360533
+0 row(s) in 0.0080 seconds
+
+hbase(main):019:0> scan 'flight'
+ROW                                                          COLUMN+CELL                                                                                                                                                                     
+ 1                                                           column=finfo:dest, timestamp=1652523825555, value=Jannat                                                                                                                        
+ 1                                                           column=finfo:source, timestamp=1652523811502, value=Mumbai                                                                                                                      
+ 1                                                           column=finfo:year, timestamp=1652523856933, value=2050                                                                                                                          
+ 1                                                           column=fsch:at, timestamp=1652523871541, value=10:10 am                                                                                                                         
+ 1                                                           column=fsch:delay_in_mins, timestamp=1652524373079, value=26                                                                                                                    
+ 1                                                           column=fsch:dt, timestamp=1652523881745, value=12:10 am                                                                                                                         
+ 1                                                           column=revenue:rs, timestamp=1652525367678, value=45000                                                                                                                         
+ 2                                                           column=finfo:dest, timestamp=1652523972319, value=Manali                                                                                                                        
+ 2                                                           column=finfo:source, timestamp=1652523954392, value=Kedarnath                                                                                                                   
+ 2                                                           column=finfo:year, timestamp=1652523984338, value=2030                                                                                                                          
+ 2                                                           column=fsch:at, timestamp=1652524001643, value=10:15 am                                                                                                                         
+ 2                                                           column=fsch:delay_in_mins, timestamp=1652524287979, value=22                                                                                                                    
+ 2                                                           column=fsch:dt, timestamp=1652524015220, value=12:15 am                                                                                                                         
+ 2                                                           column=revenue:rs, timestamp=1652525376529, value=25000                                                                                                                         
+2 row(s) in 0.0730 seconds
+
+hbase(main):020:0> 
+
+
+[cloudera@quickstart ~]$ hive 
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+WARNING: Hive CLI is deprecated and migration to Beeline is recommended.
+hive> CREATE external TABLE hbase_flight_new(fno int, fsource string,fdest string,fsh_at string,fsh_dt string,fsch_delay
+    > string,delay int)
+    > STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+    > WITH SERDEPROPERTIES ("hbase.columns.mapping" =
+    > ":key,finfo:source,finfo:dest,fsch:at,fsch:dt,fsch:delay,delay:dl")
+    > TBLPROPERTIES ("hbase.table.name" = "flight");
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:MetaException(message:Column Family delay is not defined in hbase table flight)
+	at org.apache.hadoop.hive.hbase.HBaseStorageHandler.preCreateTable(HBaseStorageHandler.java:235)
+	at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.createTable(HiveMetaStoreClient.java:653)
+	at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.createTable(HiveMetaStoreClient.java:646)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.hive.metastore.RetryingMetaStoreClient.invoke(RetryingMetaStoreClient.java:91)
+	at com.sun.proxy.$Proxy9.createTable(Unknown Source)
+	at org.apache.hadoop.hive.ql.metadata.Hive.createTable(Hive.java:681)
+	at org.apache.hadoop.hive.ql.exec.DDLTask.createTable(DDLTask.java:4016)
+	at org.apache.hadoop.hive.ql.exec.DDLTask.execute(DDLTask.java:301)
+	at org.apache.hadoop.hive.ql.exec.Task.executeTask(Task.java:160)
+	at org.apache.hadoop.hive.ql.exec.TaskRunner.runSequential(TaskRunner.java:88)
+	at org.apache.hadoop.hive.ql.Driver.launchTask(Driver.java:1638)
+	at org.apache.hadoop.hive.ql.Driver.execute(Driver.java:1397)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1181)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+)
+hive> CREATE external TABLE hbase_flight_new(fno int, fsource string,fdest string,fsh_at string,fsh_dt string,delay int)
+    > STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+    > WITH SERDEPROPERTIES ("hbase.columns.mapping" =
+    > ":key,finfo:source,finfo:dest,fsch:at,fsch:dt,delay:dl")
+    > TBLPROPERTIES ("hbase.table.name" = "flight");
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:MetaException(message:Column Family delay is not defined in hbase table flight)
+	at org.apache.hadoop.hive.hbase.HBaseStorageHandler.preCreateTable(HBaseStorageHandler.java:235)
+	at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.createTable(HiveMetaStoreClient.java:653)
+	at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.createTable(HiveMetaStoreClient.java:646)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.hive.metastore.RetryingMetaStoreClient.invoke(RetryingMetaStoreClient.java:91)
+	at com.sun.proxy.$Proxy9.createTable(Unknown Source)
+	at org.apache.hadoop.hive.ql.metadata.Hive.createTable(Hive.java:681)
+	at org.apache.hadoop.hive.ql.exec.DDLTask.createTable(DDLTask.java:4016)
+	at org.apache.hadoop.hive.ql.exec.DDLTask.execute(DDLTask.java:301)
+	at org.apache.hadoop.hive.ql.exec.Task.executeTask(Task.java:160)
+	at org.apache.hadoop.hive.ql.exec.TaskRunner.runSequential(TaskRunner.java:88)
+	at org.apache.hadoop.hive.ql.Driver.launchTask(Driver.java:1638)
+	at org.apache.hadoop.hive.ql.Driver.execute(Driver.java:1397)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1181)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+)
+hive> CREATE external TABLE hbase_flight_new(fno int, fsource string,fdest string,fsh_at string,fsh_dt string,delay int)
+    > STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+    > WITH SERDEPROPERTIES ("hbase.columns.mapping" =
+    > ":key,finfo:source,finfo:dest,fsch:at,fsch:dt,delay:dl")
+    > TBLPROPERTIES ("hbase.table.name" = "flight");
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:MetaException(message:Column Family delay is not defined in hbase table flight)
+	at org.apache.hadoop.hive.hbase.HBaseStorageHandler.preCreateTable(HBaseStorageHandler.java:235)
+	at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.createTable(HiveMetaStoreClient.java:653)
+	at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.createTable(HiveMetaStoreClient.java:646)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.hive.metastore.RetryingMetaStoreClient.invoke(RetryingMetaStoreClient.java:91)
+	at com.sun.proxy.$Proxy9.createTable(Unknown Source)
+	at org.apache.hadoop.hive.ql.metadata.Hive.createTable(Hive.java:681)
+	at org.apache.hadoop.hive.ql.exec.DDLTask.createTable(DDLTask.java:4016)
+	at org.apache.hadoop.hive.ql.exec.DDLTask.execute(DDLTask.java:301)
+	at org.apache.hadoop.hive.ql.exec.Task.executeTask(Task.java:160)
+	at org.apache.hadoop.hive.ql.exec.TaskRunner.runSequential(TaskRunner.java:88)
+	at org.apache.hadoop.hive.ql.Driver.launchTask(Driver.java:1638)
+	at org.apache.hadoop.hive.ql.Driver.execute(Driver.java:1397)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1181)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+)
+hive> CREATE external TABLE hbase_flight_new(fno int, fsource string,fdest string,fsh_at string,fsh_dt string,delay int)
+    > STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+    > WITH SERDEPROPERTIES ("hbase.columns.mapping" =
+    > ":key,finfo:source,finfo:dest,fsch:at,fsch:dt,fsch:delay_in_mins")
+    > TBLPROPERTIES ("hbase.table.name" = "flight");
+OK
+Time taken: 1.44 seconds
+hive> select * from hbase_flight_new 
+    > ;
+OK
+1	Mumbai	Jannat	10:10 am	12:10 am	26
+2	Kedarnath	Manali	10:15 am	12:15 am	22
+Time taken: 0.587 seconds, Fetched: 2 row(s)
+hive> select sum(delay) from hbase_flight_new
+    > ;
+Query ID = cloudera_20220514034343_39fd42e7-c863-47c2-a97c-22b150c67dbc
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1652523392758_0001, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1652523392758_0001/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1652523392758_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2022-05-14 03:44:12,277 Stage-1 map = 0%,  reduce = 0%
+2022-05-14 03:44:20,849 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.73 sec
+2022-05-14 03:44:28,260 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 2.71 sec
+MapReduce Total cumulative CPU time: 2 seconds 710 msec
+Ended Job = job_1652523392758_0001
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 2.71 sec   HDFS Read: 7407 HDFS Write: 3 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 710 msec
+OK
+48
+Time taken: 30.466 seconds, Fetched: 1 row(s)
+hive> select avg(delay) from hbase_flight_new;
+Query ID = cloudera_20220514034444_b5c17497-38be-4783-ba0f-c9aa8b3d413e
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1652523392758_0002, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1652523392758_0002/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1652523392758_0002
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2022-05-14 03:44:51,862 Stage-1 map = 0%,  reduce = 0%
+2022-05-14 03:45:00,374 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.65 sec
+2022-05-14 03:45:07,722 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 2.61 sec
+MapReduce Total cumulative CPU time: 2 seconds 610 msec
+Ended Job = job_1652523392758_0002
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 2.61 sec   HDFS Read: 7857 HDFS Write: 5 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 610 msec
+OK
+24.0
+Time taken: 25.131 seconds, Fetched: 1 row(s)
+hive> CREATE INDEX hbasefltnew_index
+    > ON TABLE hbase_flight_new (delay)
+    > AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
+    > WITH DEFERRED REBUILD;
+OK
+Time taken: 0.358 seconds
+hive> SHOW INDEX ON hbase_flight_new;
+OK
+hbasefltnew_index   	hbase_flight_new    	delay               	default__hbase_flight_new_hbasefltnew_index__	compact             	
+Time taken: 0.113 seconds, Fetched: 1 row(s)
+hive> 
+
+
+

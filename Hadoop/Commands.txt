@@ -1,0 +1,5 @@
+1.hadoop fs -ls :list down all documents,directory present in main directory
+2.hadoop fs -ls krishna :list down all the documents,directory present in krishna directory
+3.hadoop fs -cat krishna/info.txt : read content from info file
+4.hadoop fs -copyFromLocal path_of_file_at_computer path_where_you_want_to_dump_that_file :to copy file from local computer to hadoop cluster
+5.hadoop jar path_of_jar_file path_of_file_we_want_to_process path_where_we_want_to_store_output :this command use to run the program
